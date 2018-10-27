@@ -5,7 +5,7 @@ binFile=./tensor2tensor/bin
 
 PROBLEM=translate_eten
 MODEL=transformer
-HPARAMS=zhen_wmt17_transformer_rl_delta_setting
+HPARAMS=eten_transformer_rl_delta_setting
 # HPARAMS=zhen_wmt17_transformer_rl_delta_setting_random
 # HPARAMS=zhen_wmt17_transformer_rl_total_setting
 # HPARAMS=zhen_wmt17_transformer_rl_total_setting_random

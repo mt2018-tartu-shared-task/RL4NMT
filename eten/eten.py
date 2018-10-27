@@ -67,7 +67,7 @@ def bi_vocabs_token2id_generator(source_path, target_path, source_token_vocab, t
 
 
 @registry.register_problem
-class TranslateZhenWmt17(TranslateProblem):
+class TranslateEten(TranslateProblem):
     """Problem spec for WMT17 Zh-En translation."""
 
     @property
@@ -88,7 +88,7 @@ class TranslateZhenWmt17(TranslateProblem):
 
     @property
     def input_space_id(self):
-        return problem.SpaceID.ZH_TOK
+        return problem.SpaceID.DE_TOK
 
     @property
     def target_space_id(self):
@@ -99,17 +99,17 @@ class TranslateZhenWmt17(TranslateProblem):
     def generator(self, data_dir, tmp_dir, train):
         # Load source vocabulary.
         tf.logging.info("Loading and processing source vocabulary for %s from:" % ("training" if train else "validation"))
-        print('    ' + _ZHEN_VOCAB_FILES[0] + ' ... ', end='')
+        print('    ' + _ETEN_VOCAB_FILES[0] + ' ... ', end='')
         sys.stdout.flush()
-        with open(os.path.join(data_dir, _ZHEN_VOCAB_FILES[0]), 'rb') as f:
+        with open(os.path.join(data_dir, _ETEN_VOCAB_FILES[0]), 'rb') as f:
             vocab_src_list = f.read().decode('utf8', 'ignore').splitlines()
         print('Done')
         
         # Load target vocabulary.
         tf.logging.info("Loading and processing target vocabulary for %s from:" % ("training" if train else "validation"))
-        print('    ' + _ZHEN_VOCAB_FILES[1] + ' ... ', end='')
+        print('    ' + _ETEN_VOCAB_FILES[1] + ' ... ', end='')
         sys.stdout.flush()
-        with open(os.path.join(data_dir,_ZHEN_VOCAB_FILES[1]), 'rb') as f:
+        with open(os.path.join(data_dir,_ETEN_VOCAB_FILES[1]), 'rb') as f:
             vocab_trg_list = f.read().decode('utf8', 'ignore').splitlines()
         print('Done')
         
@@ -128,7 +128,7 @@ class TranslateZhenWmt17(TranslateProblem):
                                                      replace_oov="<UNK>", num_reserved_ids=text_encoder.NUM_RESERVED_TOKENS)
         
         # Select the path: train or dev (small train).
-        datapath = _ZHEN_TRAIN_DATASETS if train else _ZHEN_DEV_DATASETS
+        datapath = _ETEN_TRAIN_DATASETS if train else _ETEN_DEV_DATASETS
         datapath = [os.path.join(data_dir, item) for item in datapath]
         
         # Build a generator.
@@ -138,14 +138,14 @@ class TranslateZhenWmt17(TranslateProblem):
     # Build bi-vocabs feature encoders for decoding.
     def feature_encoders(self, data_dir):
         # Load source vocabulary.
-        tf.logging.info("Loading and processing source vocabulary from: %s" % _ZHEN_VOCAB_FILES[0])
-        with open(os.path.join(data_dir,_ZHEN_VOCAB_FILES[0]), 'rb') as f:
+        tf.logging.info("Loading and processing source vocabulary from: %s" % _ETEN_VOCAB_FILES[0])
+        with open(os.path.join(data_dir,_ETEN_VOCAB_FILES[0]), 'rb') as f:
             vocab_src_list = f.read().decode('utf8', 'ignore').splitlines()
         tf.logging.info("Done")
         
         # Load target vocabulary.
-        tf.logging.info("Loading and processing target vocabulary from: %s" % _ZHEN_VOCAB_FILES[1])
-        with open(os.path.join(data_dir,_ZHEN_VOCAB_FILES[1]), 'rb') as f:
+        tf.logging.info("Loading and processing target vocabulary from: %s" % _ETEN_VOCAB_FILES[1])
+        with open(os.path.join(data_dir,_ETEN_VOCAB_FILES[1]), 'rb') as f:
             vocab_trg_list = f.read().decode('utf8', 'ignore').splitlines()
         tf.logging.info("Done")
     
@@ -167,7 +167,7 @@ class TranslateZhenWmt17(TranslateProblem):
 
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_delta_setting():
+def eten_transformer_rl_delta_setting():
     # beam search + reward shaping
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
@@ -178,7 +178,7 @@ def zhen_wmt17_transformer_rl_delta_setting():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_delta_setting_random():
+def eten_transformer_rl_delta_setting_random():
     # multinomial sampling + reward shaping
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
@@ -190,7 +190,7 @@ def zhen_wmt17_transformer_rl_delta_setting_random():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_delta_setting_random_mrt():
+def eten_transformer_rl_delta_setting_random_mrt():
     # multinomial sampling + reward shaping + mrt 
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
@@ -203,7 +203,7 @@ def zhen_wmt17_transformer_rl_delta_setting_random_mrt():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_total_setting():
+def eten_transformer_rl_total_setting():
     # beam search + terminal reward
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
@@ -214,7 +214,7 @@ def zhen_wmt17_transformer_rl_total_setting():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_total_setting_random():
+def eten_transformer_rl_total_setting_random():
      # multinomial sampling + terminal reward
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
@@ -226,7 +226,7 @@ def zhen_wmt17_transformer_rl_total_setting_random():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_delta_setting_random_baseline():
+def eten_transformer_rl_delta_setting_random_baseline():
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
     hparams.layer_prepostprocess_dropout = 0.05
@@ -239,7 +239,7 @@ def zhen_wmt17_transformer_rl_delta_setting_random_baseline():
     return hparams
 
 @registry.register_hparams
-def zhen_wmt17_transformer_rl_delta_setting_random_mle():
+def eten_transformer_rl_delta_setting_random_mle():
     hparams = transformer.transformer_big()
     hparams.shared_embedding_and_softmax_weights = 0
     hparams.layer_prepostprocess_dropout = 0.05
